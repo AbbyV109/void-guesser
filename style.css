@@ -305,7 +305,6 @@ body {
     justify-content: center;
     width: min(90vw,300px);
     margin: 5px auto;  
-    min-height: 0;  
 }
 
 
@@ -317,9 +316,6 @@ body {
     height: 48px;
 }
 
-.feedback-row:has(.guess-val:empty) {
-    display: none;
-}
 
 .guess-val {
     display: flex;
@@ -363,13 +359,9 @@ h1, button, input, select, option, div {
         margin-top: 30px;
     }
     
-    #guess-container, #feedback-container, #guide-containe, #sidebar-container, #info-bar, #guide-container{
+    #guess-container, #feedback-container, #sidebar-container, #info-bar, #guide-container{
         grid-column: 1;
         justify-self: center;
-    }
-
-    #underline {
-        margin-top:20px;
     }
 
     #sidebar-container{
