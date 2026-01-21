@@ -448,7 +448,7 @@ document.querySelectorAll('[data-modal]').forEach(trigger => {
             modal.style.display = 'flex';
         }
         const text = document.getElementById('p-stats');
-        text.textContent = "Stadistics";
+        text.textContent = "Statistics";
     });
 });
 
