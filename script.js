@@ -817,7 +817,7 @@ function copyResults() {
             else emojis += "❓";
         }
     }
-    const url = urlActive ? "https://www.google.com" : "Void Guesser";
+    const url = urlActive ? "https://abbyv109.github.io/void-guesser/" : "Void Guesser";
     const textToCopy = `${url} | Day ${day} in ${guessesUsed}/6\n${emojis}`;
 
     navigator.clipboard.writeText(textToCopy).then(() => {
