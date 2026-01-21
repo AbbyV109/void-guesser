@@ -68,11 +68,23 @@
 }
 
 header h1 {
-    margin-top: 15px;
-    margin-bottom: 15px;
+    height: 99.6px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
     font-size: 64px;
-    letter-spacing: 0px;
+    white-space: nowrap;
+    overflow: hidden;
     color: var(--shade1);
+}
+
+@media (max-width: 420px) {
+    header h1 {
+        font-size: 15vw; 
+    }
 }
 
 body {
@@ -135,6 +147,7 @@ body {
     font-size: 24px;
     color: var(--shade1);
     width: 100%;
+    height: 27.2px;
 }
 
 #info{
@@ -346,6 +359,12 @@ h1, button, input, select, option, div {
         justify-self: center;
     }
 
+    #sidebar-container{
+        width: min(90vw, 721.6px);
+        justify-content: center;
+        justify-items: center;
+    }
+
     #guide-container, #underline{
         display: none;
     }
@@ -399,7 +418,7 @@ h1, button, input, select, option, div {
 .modal-content {
     background-color: var(--shade4);
     color: var(--shade0);
-    margin: 2% auto;
+    margin: 5% 5%;
     padding: 24px;
     padding-bottom: 0px;
     border: 4px solid var(--shade2);
