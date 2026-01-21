@@ -393,10 +393,9 @@ h1, button, input, select, option, div {
     z-index: 2000;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-
-    display: none; 
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
     align-items: center; 
     justify-content: center;
 }
@@ -415,10 +414,10 @@ h1, button, input, select, option, div {
     image-rendering: pixelated;
 }
 
+
 .modal-content {
     background-color: var(--shade4);
     color: var(--shade0);
-    margin: 5% 5%;
     padding: 24px;
     padding-bottom: 0px;
     border: 4px solid var(--shade2);
