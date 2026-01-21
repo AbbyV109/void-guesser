@@ -144,7 +144,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 24px;
+    font-size: 25.6px;
     color: var(--shade1);
     width: 100%;
     height: 27.2px;
@@ -304,7 +304,8 @@ body {
     align-items: center;
     justify-content: center;
     width: min(90vw,300px);
-    margin: 5px auto;    
+    margin: 5px auto;  
+    min-height: 0;  
 }
 
 
@@ -314,6 +315,10 @@ body {
     justify-content: center;
     gap: 4px;
     height: 48px;
+}
+
+.feedback-row:has(.guess-val:empty) {
+    display: none;
 }
 
 .guess-val {
@@ -363,6 +368,10 @@ h1, button, input, select, option, div {
         justify-self: center;
     }
 
+    #underline {
+        margin-top:20px;
+    }
+
     #sidebar-container{
         width: min(90vw, 721.6px);
         justify-content: center;
@@ -379,6 +388,10 @@ h1, button, input, select, option, div {
     
     #underline {
         order: 7;
+    }
+
+    #info-bar{
+        font-size: 24px;
     }
 
 }
