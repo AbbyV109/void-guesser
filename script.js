@@ -13,7 +13,7 @@ const shareContainer = document.getElementById('share-container');
 const prefix = 'void_guesser_';
 const amountBranes = 567
 const braneIndexes = Array.from({ length: amountBranes }, (_, i) => i);;
-const seed = new Date().getUTCFullYear() - 8;
+const seed = new Date().getUTCFullYear() - 40;
 const shuffledBranes = seededShuffle(braneIndexes, seed);
 const palettes = {
     0: {0: [255,255,255], 1: [192, 192, 192], 2: [128, 128, 128], 3: [0, 0, 0]},
@@ -118,7 +118,7 @@ function getDailyBraneIndex() {
 }
 
 function getDay(){
-    const start = Date.UTC(2026, 0, 20, 5, 0, 0);
+    const start = Date.UTC(2026, 0, 22, 5, 0, 0);
     const now = Date.now();
     return Math.floor((now - start) / 86400000);
 }
@@ -801,7 +801,7 @@ function updateStats(latestGuessCount) {
 
 function copyResults() {
     const urlActive = document.getElementById('include-url').checked;
-    let day = getDay();
+    let day = getDay() + 1;
     const guessesUsed = roundWon ? String(numGuesses+1) : "X";
     
     let emojis = "";
