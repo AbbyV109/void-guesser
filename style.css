@@ -353,8 +353,12 @@ h1, button, input, select, option, div {
         grid-template-columns: 1fr;
         justify-items: center;
     }
+
+    header h1 {
+        margin-top: 30px;
+    }
     
-    #guess-container, #feedback-container, #guide-containe, #sidebar-container, #info-bar{
+    #guess-container, #feedback-container, #guide-containe, #sidebar-container, #info-bar, #guide-container{
         grid-column: 1;
         justify-self: center;
     }
@@ -363,28 +367,20 @@ h1, button, input, select, option, div {
         width: min(90vw, 721.6px);
         justify-content: center;
         justify-items: center;
+        order: 5;
     }
 
-    #guide-container, #underline{
-        display: none;
-    }
-}
-
-@media (max-width: 700px){
-    #palette-container{
-        top: auto;
-        bottom: 10px;
-    }
-
-    #palette-dropdown {
-        top: auto;
-        bottom: 100%; 
+    #guide-container {
+        display: flex;
+        order: 10;
+        justify-self: center;
+        width: min(90vw, 270px);
     }
     
-    #mode-button{
-        top: auto;
-        bottom: 10px;
+    #underline {
+        order: 7;
     }
+
 }
 
 .modal {
