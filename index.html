@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>Void Guesser</title>
+</head>
+
+<body>
+    <header>
+        <h1>Void Guesser</h1>
+    </header>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-header">
+                <img class="header-icon" data-tile="modalquestion">
+                <p>How to play</p>
+                <img class="header-icon" data-tile="modalquestion">
+            </div>
+            <p>Identify the brane before you run out of locusts.</p>
+            <p>Every guess will give you feedback and expand the viewable area.</p>
+            <p>The possible guesses will update accordingly.</p>
+            <p>Brane resets every day at 5 a.m. UTC.</p>
+            <p>Good Luck!</p>
+            <hr>
+            <div class="modal-header">
+                <img class="header-icon" data-tile="modaleepy">
+                <p>Tips and tricks</p>
+                <img class="header-icon" data-tile="modaleepy">
+            </div>
+            <p>Remember that the first brane of a domain is the mural room and the second is the statue room.</p>
+            <p>Every tree brane counts as any other tree brane.</p>
+            <p>Every Lillie brane that isn't unique has been eliminated.</p>
+            <p>If your guess includes the letter "L" it will only display Lillie rooms in the suggestions.</p>
+            <p>Suggestions and guesses aren't case sensitive.</p>
+            <hr>
+            <p>All assets used are from <a href="https://store.steampowered.com/app/2121980/Void_Stranger/" target="_blank" rel="noopener noreferrer">Void Stranger</a>.</p>
+            <p>Made by AbbyV.</p>
+        </div>
+    </div>
+
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-header">
+                <img class="header-icon result" data-tile="modalyay">
+                <p id="p-stats">Stadistics</p>
+                <img class="header-icon result" data-tile="modalyay">
+            </div>
+            <div class="stats-header">
+                <div class="stat-box">
+                    <span class="stat-val" id="stat-played">0</span>
+                    <span class="stat-label">Played</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-val" id="stat-winrate">0</span>
+                    <span class="stat-label">Win %</span>
+                </div>
+            </div>
+            <div class="guess-distribution">
+                <p>Guess distribution:</p>
+                <div class="dist-row">
+                    <div class="dist-num">1</div>
+                    <div class="dist-bar" style="width: 0%">0</div>
+                </div>
+                <div class="dist-row">
+                    <div class="dist-num">2</div>
+                    <div class="dist-bar" style="width: 0%">0</div>
+                </div>
+                <div class="dist-row">
+                    <div class="dist-num">3</div>
+                    <div class="dist-bar" style="width: 0%">0</div>
+                </div>                
+                <div class="dist-row">
+                    <div class="dist-num">4</div>
+                    <div class="dist-bar" style="width: 0%">0</div>
+                </div>
+                <div class="dist-row">
+                    <div class="dist-num">5</div>
+                    <div class="dist-bar" style="width: 0%">0</div>
+                </div>
+                <div class="dist-row">
+                    <div class="dist-num">6</div>
+                    <div class="dist-bar" style="width: 0%">0</div>
+                </div>
+            </div>
+            <div id="share-container">
+                <button disabled id="copy-button" onclick="copyResults()">Copy today's results</button>
+                <div id="share-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="include-url">
+                        Include URL
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="highscore-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-header">
+                <img class="header-icon" data-tile="modalyay">
+                <p>New Highscore!</p>
+                <img class="header-icon" data-tile="modalyay">
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div id="palette-container">
+            <button id="palette-button">GRAY</button>
+            <div id="palette-dropdown" class="dropdown">
+                <div data-value="0">GRAY</div>
+                <div data-value="1">R***</div>
+                <div data-value="2">O***</div>
+                <div data-value="3">Y***</div>
+                <div data-value="4">G***</div>
+                <div data-value="5">B***</div>
+                <div data-value="6">I***</div>
+                <div data-value="7">V***</div>
+                <div data-value="8">MELLOW</div>
+            </div>
+        </div>
+        <button id="mode-button">Endless Mode</button>
+
+        <div id="game-container">
+            <div id="underline">GUIDE</div>
+            <div id="info-bar">
+                <div id="highscore"></div>
+                <div id="info">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="currentColor" data-modal="stats-modal">
+                        <rect x="3" y="11" width="4" height="10"></rect>
+                        <rect x="10" y="3" width="4" height="18"></rect>
+                        <rect x="17" y="13" width="4" height="8"></rect>
+                    </svg>
+                    <svg class="info-icon" width="24" height="24" viewBox="0 0 100 100" fill="none" data-modal="info-modal">
+                        <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8"/>
+                        <path d="M36 38C36 30.268 42.268 24 50 24C57.732 24 64 30.268 64 38C64 43.1537 61.222 47.6587 57.062 50.1349C52.9231 52.5984 50 56.5501 50 61V62" 
+                                stroke="currentColor" stroke-width="8" stroke-linecap="square"/>
+                        <rect x="46" y="70" width="8" height="8" fill="currentColor"/>
+                    </svg>
+                </div>
+            </div>
+            <div></div>
+            <div id="guide-container">
+                <p><span>Add's Domain:</span> <span>B001</span><span>-</span><span>B028</span></p>
+                <p><span>Eus' Domain:</span> <span>B029</span><span>-</span><span>B056</span></p>
+                <p><span>Bee's Domain:</span> <span>B057</span><span>-</span><span>B084</span></p>
+                <p><span>Mon's Domain:</span> <span>B085</span><span>-</span><span>B112</span></p>
+                <p><span>Tan's Domain:</span> <span>B113</span><span>-</span><span>B140</span></p>
+                <p><span>Gor's Domain:</span> <span>B141</span><span>-</span><span>B168</span></p>
+                <p><span>Lev's Domain:</span> <span>B169</span><span>-</span><span>B196</span></p>
+                <p><span>Cif's Domain:</span> <span>B197</span><span>-</span><span>B224</span></p>
+                <p><span>???'s Domain:</span> <span>B225</span><span>-</span><span>B254</span></p>
+                <p><span>Sword path:</span> <span>E017</span><span>-</span><span>E031</span></p>
+                <p><span>Wings path:</span> <span>E032</span><span>-</span><span>E046</span></p>
+                <p><span>Memory path:</span> <span>E047</span><span>-</span><span>E061</span></p>
+                <p><span>Final path:</span> <span>E002</span><span>-</span><span>E016</span></p>
+            </div>
+            <div id="brane-container"></div>
+            <div id="sidebar-container">
+                <div id="guess-container">
+                    <input type="text" id="brane-guess" placeholder="Select a brane" autocomplete="off" autocorrect="off" spellcheck="false">
+                    <div id="dropdown" class="dropdown"></div>
+                    <button id="submit-guess">Guess</button>
+                </div>
+                <div id="feedback-container">
+                    <div class="feedback-row">
+                        <div class="guess-val"></div>
+                        <div id="feedback-5" class="guess-feedback"></div>
+                    </div>
+                    <div class="feedback-row">
+                        <div class="guess-val"></div>
+                        <div id="feedback-4" class="guess-feedback"></div>
+                    </div>
+                    <div class="feedback-row">
+                        <div class="guess-val"></div>
+                        <div id="feedback-3" class="guess-feedback"></div>
+                    </div>
+                    <div class="feedback-row">
+                        <div class="guess-val"></div>
+                        <div id="feedback-2" class="guess-feedback"></div>
+                    </div>
+                    <div class="feedback-row">
+                        <div class="guess-val"></div>
+                        <div id="feedback-1" class="guess-feedback"></div>
+                    </div>
+                    <div class="feedback-row">
+                        <div class="guess-val"></div>
+                        <div id="feedback-0" class="guess-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+    <script src="assets.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
