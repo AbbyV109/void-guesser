@@ -13,7 +13,7 @@ const shareContainer = document.getElementById('share-container');
 const prefix = 'void_guesser_';
 const amountBranes = 567
 const braneIndexes = Array.from({ length: amountBranes }, (_, i) => i);;
-const seed = new Date().getUTCFullYear() - 40;
+const seed = new Date().getUTCFullYear() - 100;
 const shuffledBranes = seededShuffle(braneIndexes, seed);
 const palettes = {
     0: {0: [255,255,255], 1: [192, 192, 192], 2: [128, 128, 128], 3: [0, 0, 0]},
@@ -825,4 +825,5 @@ function copyResults() {
         btn.textContent = "Copied!";
         setTimeout(() => btn.textContent = "Copy today's results", 2000);
     });
+
 }
