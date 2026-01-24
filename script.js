@@ -9,7 +9,7 @@ const modeButton = document.getElementById('mode-button');
 const header = document.querySelector('header h1')
 const copyButton = document.getElementById('copy-button');
 const highscoreC = document.getElementById('highscore');
-const shareContainer = document.getElementById('share-container');
+const shareContainer = document.getElementById('button-container');
 const prefix = 'void_guesser_';
 const amountBranes = 567
 const braneIndexes = Array.from({ length: amountBranes }, (_, i) => i);;

@@ -527,7 +527,7 @@ hr {
     background-color: var(--shade1); 
 }
 
-#share-container {
+#button-container {
     width: 100%;
     display: flex;
     flex-direction: column;
