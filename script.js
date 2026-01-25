@@ -52,6 +52,10 @@ if (savedHighscore !== null) {
 
 const currentDay = getDay();
 const savedDay = localStorage.getItem(prefix + 'lastDayPlayed');
+if (savedDay === null){
+    const modal = document.getElementById('info-modal');
+    modal.style.display = 'flex';
+}
 if (savedDay !== null && parseInt(savedDay) !== currentDay) {
     localStorage.removeItem(prefix + 'savedVictoryCounted');
     for (let i=0;i<=5;i++) {
@@ -137,7 +141,8 @@ async function getBrane(index) {
     return branes[index].split(",");
 }
 
-function getValidPositions(){
+function getValidPositions(input){
+    let tmpStage = (typeof input === 'number') ? input : stage;
     let res = [112,113,114,115,116,117,118,119,120,121,122,123,124,125];
     let c = center;
     let row;
@@ -149,11 +154,11 @@ function getValidPositions(){
     else if (c<=59) c+=23;
     else if (c<=71) c+=25;
     let n;
-    if (stage === 5) n=1;
-    else if (stage === 4) n=2;
-    else if (stage === 3) n=4;
-    else if (stage === 2) n=6;
-    else if (stage <= 1) n=13;
+    if (tmpStage === 5) n=1;
+    else if (tmpStage === 4) n=2;
+    else if (tmpStage === 3) n=4;
+    else if (tmpStage === 2) n=6;
+    else if (tmpStage <= 1) n=13;
     for (let i = -n; i <= n; i++) {
         for (let j = -n; j <= n; j++) {
             row = Math.floor((c+(14*i)) / 14);
@@ -166,8 +171,9 @@ function getValidPositions(){
     return res;
 }
 
-async function renderBrane() {
-    tiles[tiles.length - 12] = 'num'+stage;                                 // Change locust count
+async function renderBrane(input) {
+    let tmpStage = (typeof input === 'number') ? input : stage;
+    tiles[tiles.length - 12] = 'num'+ tmpStage;                             // Change locust count
     if (roundCompleted){                                                    // Display solution
         tiles[tiles.length-1] = solution_display[3];
         tiles[tiles.length-2] = solution_display[2];
@@ -177,12 +183,12 @@ async function renderBrane() {
     while (braneContainer.firstChild) braneContainer.removeChild(braneContainer.firstChild);
     let slot;
     let entity = false;
-    let valid_positions = getValidPositions();
+    let valid_positions = getValidPositions(input);
     let i = 0;
 
     for (const tile of tiles){
         let isEntity = tile.length >= 3 && !["w","e","x"].includes(tile[0]);
-        if(valid_positions.includes(i) || roundCompleted){
+        if(valid_positions.includes(i) || (roundCompleted && typeof input !== 'number')){
             const img = document.createElement('img');
             img.src = tintedCache[tile];
             if (entity){                                                    // If last tile was an entity
@@ -482,6 +488,26 @@ function checkDiscard(match){
     }
     return res;
 }
+
+const rows = document.querySelectorAll('.feedback-row');
+
+rows.forEach((row) => {
+    const feedbackDiv = row.querySelector('.guess-feedback');
+    const valDiv = row.querySelector('.guess-val');
+    const rowId = parseInt(feedbackDiv.id.split('-')[1]);
+
+    row.addEventListener('mouseenter', () => {
+        if (valDiv.textContent !== "" && roundCompleted) {
+            renderBrane(rowId);        
+        }
+    });
+
+    row.addEventListener('mouseleave', () => {
+        if (valDiv.textContent !== "" && roundCompleted) {
+            renderBrane();        
+        }
+    });
+});
 
 // Game logic
 updateCSS();
