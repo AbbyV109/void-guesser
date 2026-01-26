@@ -52,9 +52,9 @@ if (savedHighscore !== null) {
 
 const currentDay = getDay();
 const savedDay = localStorage.getItem(prefix + 'lastDayPlayed');
+let firstLogin = false;
 if (savedDay === null){
-    const modal = document.getElementById('info-modal');
-    modal.style.display = 'flex';
+    firstLogin = true;
 }
 if (savedDay !== null && parseInt(savedDay) !== currentDay) {
     localStorage.removeItem(prefix + 'savedVictoryCounted');
@@ -609,6 +609,13 @@ async function startRound(){
         }
     }
     renderBrane();
+    if (firstLogin) {
+        const modal = document.getElementById('info-modal');
+        palette += 9;
+        modalExists = true;
+        await changePalette();
+        modal.style.display = 'flex';
+    }
 }
 
 function checkGuess(input) {
