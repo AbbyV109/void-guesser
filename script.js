@@ -70,10 +70,23 @@ if (savedVictoryCounted === 'true') {
     victoryCounted = true;
 }
 
+const savedScoreCounted = localStorage.getItem(prefix + 'savedScoreCounted');
+let scoreCounted = false;
+if (savedScoreCounted === 'true') {
+    scoreCounted = true;
+}
+
 const savedGuesses = ["","","","","",""];
 for (let i=0;i<=5;i++){
     savedGuesses[i] = String(localStorage.getItem(prefix + `savedGuess${i}`));
 }
+
+const savedEndlessGuesses = ["","","","","",""];
+for (let i=0;i<=5;i++){
+    savedEndlessGuesses[i] = String(localStorage.getItem(prefix + `savedEndlessGuess${i}`));
+}
+
+
 let stats = JSON.parse(localStorage.getItem(prefix + 'savedStats')) || [0, 0, 0, 0, 0, 0];
 let gamesPlayed = parseInt(localStorage.getItem(prefix + 'gamesPlayed')) || 0;
 let numGuesses;
@@ -436,7 +449,8 @@ modeButton.addEventListener('click', () => {
         modeButton.textContent = "Endless Mode";
         header.textContent = "Void Guesser";
     }else {
-        score = 0;
+        score = parseInt(localStorage.getItem(prefix + 'savedEndlessScore'));
+        if (isNaN(score)) score = 0;
         startEndless();
         modeButton.textContent = "Daily Mode";
         header.textContent = "Endless Guesser";
@@ -550,9 +564,20 @@ function dayChangeCheck(){
 }
 
 function startEndless(){
+    for (let i=0;i<=5;i++){
+        savedEndlessGuesses[i] = String(localStorage.getItem(prefix + `savedEndlessGuess${i}`));
+    }
     mode = 1;
-    index = Math.floor(Math.random() * amountBranes)
-    center = Math.floor(Math.random() * 72);
+    index = parseInt(localStorage.getItem(prefix + 'savedEndlessIndex'));
+    if (isNaN(index)) {
+        index = Math.floor(Math.random() * amountBranes);
+        localStorage.setItem(prefix + 'savedEndlessIndex', index);
+    }
+    center = parseInt(localStorage.getItem(prefix + 'savedEndlessCenter'));
+    if (isNaN(center)) {
+        center = Math.floor(Math.random() * 72);
+        localStorage.setItem(prefix + 'savedEndlessCenter', center);
+    }
     highscoreC.textContent = "Highscore: " + highscore + " | Current: " + score;
     copyButton.disabled = true;
     shareContainer.style.display = "none";
@@ -607,6 +632,10 @@ async function startRound(){
         for (let i=stage; i>=0; i--){
             checkGuess(savedGuesses[i]);
         }
+    } else {
+        for (let i=stage; i>=0; i--){
+            if (savedEndlessGuesses[i] !== "null") checkGuess(savedEndlessGuesses[i]);
+        }
     }
     renderBrane();
     if (firstLogin) {
@@ -615,6 +644,7 @@ async function startRound(){
         modalExists = true;
         await changePalette();
         modal.style.display = 'flex';
+        firstLogin = false;
     }
 }
 
@@ -624,6 +654,17 @@ function checkGuess(input) {
         return;
     }
     if (submitButton.textContent==="Next" || submitButton.textContent==="Reset"){
+        for (let i=0;i<=5;i++) {
+            localStorage.removeItem(prefix + `savedEndlessGuess${i}`);
+        }
+        localStorage.removeItem(prefix + 'savedEndlessIndex');
+        localStorage.removeItem(prefix + 'savedEndlessCenter');
+        localStorage.removeItem(prefix + 'savedScoreCounted');
+        scoreCounted = false;
+        if (submitButton.textContent==="Reset"){
+            score = 0;
+            localStorage.setItem(prefix + 'savedEndlessScore', score);
+        }
         startEndless();
         return;
     }
@@ -636,6 +677,7 @@ function checkGuess(input) {
     guessInput.value = "";
     if (guess_lower.length !== 0){
         if (!mode) localStorage.setItem(prefix + `savedGuess${stage}`, guess);
+        else localStorage.setItem(prefix + `savedEndlessGuess${stage}`, guess);
     
         const guessNum = parseInt(guess_lower.slice(1,4), 10);
         const solutionNum = parseInt(solution.slice(1,4), 10);
@@ -775,7 +817,7 @@ async function completeRound(){
     }
     if (mode) {
         if (roundWon) {
-            score += 1;
+            if (!scoreCounted) score += 1;
             if (highscore < score){
                 highscore = score;
                 localStorage.setItem(prefix + 'savedHighscore', highscore);
@@ -795,8 +837,12 @@ async function completeRound(){
                 }
             }
             newHighscore = false;
-            score = 0;
             submitButton.textContent = "Reset"
+        }
+        if (!scoreCounted){
+            scoreCounted = true;
+            localStorage.setItem(prefix + 'savedScoreCounted', scoreCounted);
+            localStorage.setItem(prefix + 'savedEndlessScore', score);
         }
     }
 }
