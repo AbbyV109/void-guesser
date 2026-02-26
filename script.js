@@ -880,20 +880,39 @@ function updateStats(latestGuessCount) {
 
 function copyResults() {
     const urlActive = document.getElementById('include-url').checked;
+    const braneRotActive = document.getElementById('branerot').checked;
     let day = getDay() + 1;
-    const guessesUsed = roundWon ? String(numGuesses+1) : "X";
+    let guessesUsed = roundWon ? String(numGuesses+1) : "X";
     
+    if (braneRotActive) {
+        if (guessesUsed==="1") guessesUsed = ":minimum:";
+        else if (guessesUsed==="2") guessesUsed = ":2_:";
+        else if (guessesUsed==="3") guessesUsed = ":three~1:";
+        else if (guessesUsed==="4") guessesUsed = ":2_: + :2_:";
+        else if (guessesUsed==="5") guessesUsed = ":2_: + :three~1:";
+        else if (guessesUsed==="6") guessesUsed = ":three~1: + :three~1:";
+        else if (guessesUsed==="X") guessesUsed = ":boohoo:";
+    }
+
     let emojis = "";
     for (let i = 5; i >= 0; i--) {
         const slot = document.getElementById(`feedback-${i}`);
         const tile = slot ? slot.dataset.tile : null;
 
-        if (tile) {
+        if (tile && !braneRotActive) {
             if (tile === "0yes") emojis += "🟩";
             else if (tile === "0up") emojis += "⬆️";
             else if (tile === "0down") emojis += "⬇️";
             else if (tile === "0no") emojis += "🟥";
             else emojis += "❓";
+        }
+
+        if (tile && braneRotActive) {
+            if (tile === "0yes") emojis += ":vsYes:";
+            else if (tile === "0up") emojis += ":p_side:";
+            else if (tile === "0down") emojis += ":p_back:";
+            else if (tile === "0no") emojis += ":vsNo:";
+            else emojis += ":huh:";
         }
     }
     const url = urlActive ? "https://abbyv109.github.io/void-guesser/" : "Void Guesser";

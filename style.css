@@ -561,6 +561,8 @@ hr {
 #share-options {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    gap: 7px;
     color: var(--shade0);
 }
 
@@ -594,6 +596,33 @@ hr {
 }
 
 #include-url:checked::after {
+    content: "✔";
+    color: var(--shade4);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#branerot {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: var(--shade4);
+    border: 2px solid var(--shade2);
+    
+    display: inline-grid;
+    place-content: center;
+    cursor: pointer;
+    margin-bottom: 4px;
+    vertical-align: middle;
+}
+
+#branerot:checked {
+    background-color: var(--shade1);
+    border-color: var(--shade1);
+}
+
+#branerot:checked::after {
     content: "✔";
     color: var(--shade4);
     font-size: 14px;
