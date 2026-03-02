@@ -86,6 +86,28 @@ for (let i=0;i<=5;i++){
     savedEndlessGuesses[i] = String(localStorage.getItem(prefix + `savedEndlessGuess${i}`));
 }
 
+const branerotCheckbox = document.getElementById('branerot');
+if (branerotCheckbox) {
+  const savedBranerot = localStorage.getItem(prefix + 'savedBranerot');
+  if (savedBranerot !== null) {
+    branerotCheckbox.checked = (savedBranerot === 'true');
+  }
+  branerotCheckbox.addEventListener('change', (event) => {
+    localStorage.setItem(prefix + 'savedBranerot', event.target.checked);
+  });
+}
+
+const linkCheckbox = document.getElementById('include-url');
+if (linkCheckbox) {
+  const savedLink = localStorage.getItem(prefix + 'savedLink');
+  if (savedLink !== null) {
+    linkCheckbox.checked = (savedLink === 'true');
+  }
+  linkCheckbox.addEventListener('change', (event) => {
+    localStorage.setItem(prefix + 'savedLink', event.target.checked);
+  });
+}
+
 
 let stats = JSON.parse(localStorage.getItem(prefix + 'savedStats')) || [0, 0, 0, 0, 0, 0];
 let gamesPlayed = parseInt(localStorage.getItem(prefix + 'gamesPlayed')) || 0;
@@ -923,4 +945,5 @@ function copyResults() {
         btn.textContent = "Copied!";
         setTimeout(() => btn.textContent = "Copy today's results", 2000);
     });
+
 }
