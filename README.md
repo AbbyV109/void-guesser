@@ -1,3 +1,5 @@
+Play here: https://abbyv109.github.io/void-guesser/
+
 Void Guesser is a geoguesser style daily game based on the videogame Void Stranger.
 
 All visual assets are from Void Stranger: https://store.steampowered.com/app/2121980/Void_Stranger/
