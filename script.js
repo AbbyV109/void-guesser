@@ -166,7 +166,6 @@ async function loadBranes() {
     const text = await fetch('./branes.txt').then(r => r.text());
     branes = text.trim().replaceAll("\r","").split("\n");
     possible_guesses = branes.map(t => t.split(",")[0])
-    possible_guesses.push("DOOR")
 }
 
 async function getBrane(index) {
@@ -180,34 +179,30 @@ async function getBrane(index) {
 function getValidPositions(input){
     let tmpStage = (typeof input === 'number') ? input : stage;
     let res = [112,113,114,115,116,117,118,119,120,121,122,123,124,125];
+    let c = center;
     let row;
     let column;
-
+    if (c<=11) c+=15;
+    else if (c<=23) c+=17;
+    else if (c<=35) c+=19;
+    else if (c<=47) c+=21;
+    else if (c<=59) c+=23;
+    else if (c<=71) c+=25;
     let n;
     if (tmpStage === 5) n=1;
-    else if (tmpStage === 4) n=1;
-    else if (tmpStage === 3) n=1;
-    else if (tmpStage === 2) n=1;
-    else if (tmpStage === 1) n=2;
-    else if (tmpStage === 0) n=3;
-    for (c of center.slice(tmpStage)){
-        if (c<=11) c+=15;
-        else if (c<=23) c+=17;
-        else if (c<=35) c+=19;
-        else if (c<=47) c+=21;
-        else if (c<=59) c+=23;
-        else if (c<=71) c+=25;
-        for (let i = -n; i <= n; i++) {
-            for (let j = -n; j <= n; j++) {
-                row = Math.floor((c+(14*i)) / 14);
-                column = c % 14 + j;
-                if (row>=0 && row <=7 && column>=0 && column<=13){
-                    res.push(c+(14*i)+j)
-                }
+    else if (tmpStage === 4) n=2;
+    else if (tmpStage === 3) n=4;
+    else if (tmpStage === 2) n=6;
+    else if (tmpStage <= 1) n=13;
+    for (let i = -n; i <= n; i++) {
+        for (let j = -n; j <= n; j++) {
+            row = Math.floor((c+(14*i)) / 14);
+            column = c % 14 + j;
+            if (row>=0 && row <=7 && column>=0 && column<=13){
+                res.push(c+(14*i)+j)
             }
         }
     }
-
     return res;
 }
 
@@ -568,13 +563,9 @@ function startDaily(){
     mode = 0;
     index = getDailyBraneIndex();
     const rng = mulberry32(index);
-    center = [Math.floor(rng() * 72),Math.floor(rng() * 72),Math.floor(rng() * 72),Math.floor(rng() * 72),Math.floor(rng() * 72),Math.floor(rng() * 72)];
+    center = Math.floor(rng() * 72);
     highscoreC.textContent = "";
     shareContainer.style.display = "flex";
-    if(getDay()==68) {
-        index = "door"
-        center = [5,64,38,41,56,64]
-    }
     startRound();
 }
 
@@ -604,8 +595,11 @@ function startEndless(){
         index = Math.floor(Math.random() * amountBranes);
         localStorage.setItem(prefix + 'savedEndlessIndex', index);
     }
-
-    center = [Math.floor(Math.random() * 72),Math.floor(Math.random() * 72),Math.floor(Math.random() * 72),Math.floor(Math.random() * 72),Math.floor(Math.random() * 72),Math.floor(Math.random() * 72)];
+    center = parseInt(localStorage.getItem(prefix + 'savedEndlessCenter'));
+    if (isNaN(center)) {
+        center = Math.floor(Math.random() * 72);
+        localStorage.setItem(prefix + 'savedEndlessCenter', center);
+    }
     highscoreC.textContent = "Highscore: " + highscore + " | Current: " + score;
     copyButton.disabled = true;
     shareContainer.style.display = "none";
@@ -633,22 +627,13 @@ async function startRound(){
     });
 
     submitButton.textContent="Guess";
-    let brane
-    if (index==="door"){
-            if (branes.length === 0){
-        await loadBranes();
-    }
-        brane = "DOOR,w4;w4;w4;w4;w17;d0;d1;d2;d3;w16;w4;w4;w4;w4;w16;w4;w4;w4;w17;d4;d5;d6;d7;w16;w4;w4;w4;w17;f;add;f;w16;w4;w17;d8;d9;o1;o2;w16;w4;w17;add;f;f;o;f;f;f;f;f;f;f;f;f;f;f;f;o;v;o;o;f;f;f;gra;f;f;f;f;f;o;o;v;v;v;v;o;o;f;f;f;s;o;o;v;v;v;v;v;v;v;v;o;o;o;o;v;v;v;v;v;v;v;v;v;v;v;v;v;v;v;v;v;v;v".split(",")
-    } else {
-        brane = await getBrane(index);
-    }
+    let brane = await getBrane(index);
     guessInput.disabled = false;
     roundCompleted = false;
     roundWon = false;
     solution = brane[0];
-    console.log(solution)
     let sequence = [1,0,3,2]
-    if (solution.includes("h") || solution.includes("DOOR")){
+    if (solution.includes("h")){
         solution_display[0] = "que";
         solution_display[1] = "wb";
         solution_display[2] = "que";
@@ -695,6 +680,7 @@ function checkGuess(input) {
             localStorage.removeItem(prefix + `savedEndlessGuess${i}`);
         }
         localStorage.removeItem(prefix + 'savedEndlessIndex');
+        localStorage.removeItem(prefix + 'savedEndlessCenter');
         localStorage.removeItem(prefix + 'savedScoreCounted');
         scoreCounted = false;
         if (submitButton.textContent==="Reset"){
@@ -732,9 +718,6 @@ function checkGuess(input) {
             completed = true;
             roundWon = true;
             feedback = "0yes";
-        }
-        else if (tmpSolution==="door"){
-            feedback = "0question";
         }
         else if (!(tmpSolution[0]===tmpGuess[0])) {
             feedback = "0no";
